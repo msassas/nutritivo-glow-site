@@ -1,7 +1,27 @@
+# robots.txt for https://luanasalvino.com.br
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://luanasalvino.com.br/sitemap.xml
+
+# Disallow admin areas if any
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /*?*admin*
+
+# Allow common bots
 User-agent: Googlebot
 Allow: /
 
+User-agent: Googlebot-Image
+Allow: /
+
 User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
 Allow: /
 
 User-agent: Twitterbot
@@ -10,5 +30,15 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Crawl delay
+Crawl-delay: 1

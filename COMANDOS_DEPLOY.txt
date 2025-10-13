@@ -1,0 +1,140 @@
+# ==================================================
+# COMANDOS PARA DEPLOY - COPIE E COLE NO TERMINAL
+# ==================================================
+
+# IMPORTANTE: Execute estes comandos na RAIZ do projeto
+# (pasta nutritivo-glow-site)
+
+# ==================================================
+# 1. PREPARAR GIT (se ainda não fez)
+# ==================================================
+
+git init
+git add .
+git commit -m "Add Facebook Conversions API - CAPI implementation"
+
+# ==================================================
+# 2. CRIAR REPOSITÓRIO NO GITHUB
+# ==================================================
+
+# Vá em: https://github.com/new
+# Nome: nutritivo-glow-site
+# Deixe PRIVADO
+# NÃO marque "Add README"
+# Criar repositório
+
+# Depois, execute (substitua SEU_USUARIO pelo seu usuário do GitHub):
+git remote add origin https://github.com/SEU_USUARIO/nutritivo-glow-site.git
+git branch -M main
+git push -u origin main
+
+# ==================================================
+# 3. DEPLOY NO VERCEL
+# ==================================================
+
+# Vá em: https://vercel.com
+# Sign Up → Continue with GitHub
+# Add New Project → Import seu repositório
+
+# Configurações do projeto no Vercel:
+# - Framework Preset: Other
+# - Root Directory: server/
+# - Build Command: (vazio)
+# - Output Directory: (vazio)
+# - Install Command: npm install
+
+# Deploy!
+
+# ==================================================
+# 4. ADICIONAR VARIÁVEIS DE AMBIENTE NO VERCEL
+# ==================================================
+
+# No Vercel, vá em: Settings → Environment Variables
+# Adicione estas 4 variáveis:
+
+# Nome: META_ACCESS_TOKEN
+# Valor: EAAc3EcZA8WXUBPo3vxBasVrJ7nTQFOFqKyzgaOC8wqJcveas3cBZAEFRQ8te6ZAfOwHjoPSuUdFwzBrPe3sX5bCd1jURg0IFiAbm8uucWKcpzNGukE6mIWAP7NcnPz2JgYkCYJpNg9wjfNhuDYnQp3lHs4CTJXUGg5WFInatKPbxlE4ZAY167vfiXhlunuCgMQZDZD
+
+# Nome: PORT
+# Valor: 3001
+
+# Nome: FRONTEND_URL
+# Valor: https://luanasalvino.com.br
+# (IMPORTANTE: Substitua pela URL real do seu site!)
+
+# Nome: NODE_ENV
+# Valor: production
+
+# Salvar → Deployments → Redeploy
+
+# ==================================================
+# 5. COPIAR URL DO VERCEL
+# ==================================================
+
+# Você vai receber uma URL tipo:
+# https://seu-projeto-xxxxx.vercel.app
+
+# COPIE ESSA URL!
+
+# ==================================================
+# 6. ATUALIZAR FRONTEND COM URL DO VERCEL
+# ==================================================
+
+# Edite o arquivo .env na raiz do projeto
+# Substitua a linha VITE_API_URL por:
+
+VITE_API_URL=https://seu-projeto-xxxxx.vercel.app/api/events
+
+# (Cole a URL do Vercel que você copiou acima + /api/events)
+
+# ==================================================
+# 7. BUILD DO FRONTEND
+# ==================================================
+
+npm run build
+
+# Isso vai gerar a pasta dist/
+
+# ==================================================
+# 8. UPLOAD NA HOSTINGER
+# ==================================================
+
+# OPÇÃO A: Via FTP
+# 1. Baixe FileZilla: https://filezilla-project.org/
+# 2. Conecte no FTP da Hostinger (busque credenciais no painel)
+# 3. Vá em public_html/
+# 4. DELETE TUDO QUE TEM LÁ
+# 5. Arraste o CONTEÚDO de dist/ (não a pasta dist/, mas os arquivos DENTRO dela)
+
+# OPÇÃO B: Via File Manager da Hostinger
+# 1. Painel Hostinger → File Manager
+# 2. public_html/ → Deletar tudo
+# 3. Upload → Selecionar todos os arquivos de dentro da pasta dist/
+
+# ==================================================
+# 9. TESTAR
+# ==================================================
+
+# Servidor Vercel (abra no navegador):
+https://seu-projeto-xxxxx.vercel.app/health
+
+# Deve retornar: {"status":"OK","metaPixelId":"2020158598758649"}
+
+# Site Hostinger (abra no navegador):
+https://luanasalvino.com.br
+
+# Abra o Console (F12) e veja se aparece:
+# [Facebook Pixel] PageView enviado
+# [Conversions API] PageView enviado com sucesso
+
+# Facebook Events Manager:
+https://business.facebook.com/events_manager2/list
+# Selecione Pixel 2020158598758649
+# Veja os eventos chegando em tempo real
+
+# ==================================================
+# PRONTO! 🎉
+# ==================================================
+
+# Taxa de cobertura vai subir de 9% para 75%+ nos próximos dias!
+# Monitore em: Facebook Events Manager → Visão Geral → API de Conversões

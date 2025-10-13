@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://luanasalvino.com.br/</loc>
+    <lastmod>2025-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://luanasalvino.com.br/nutritionist-hero-new.webp</image:loc>
+      <image:title>Luana Salvino - Nutricionista</image:title>
+      <image:caption>Nutricionista em Cajazeiras PB</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://luanasalvino.com.br/nutritionist-about.webp</image:loc>
+      <image:title>Luana Salvino</image:title>
+      <image:caption>Nutricionista especializada em nutrição personalizada</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

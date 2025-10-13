@@ -1,0 +1,22 @@
+{
+  "name": "nutritivo-glow-server",
+  "version": "1.0.0",
+  "description": "Servidor backend para API de Conversões do Meta",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test-connection.js"
+  },
+  "keywords": ["meta", "conversions-api", "facebook", "pixel"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "facebook-nodejs-business-sdk": "^18.0.3"
+  }
+}

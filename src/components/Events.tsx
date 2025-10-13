@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { CircularTestimonials } from "@/components/ui/circular-testimonials";
-import eventCongress from "@/assets/event-congress.jpg";
-import eventTransplant from "@/assets/event-transplant.png";
-import eventUpdate from "@/assets/event-update.jpg";
+import eventCongress from "@/assets/event-congress.webp";
+import eventTransplant from "@/assets/event-transplant.webp";
+import eventUpdate from "@/assets/event-update.webp";
 
 const events = [
   {
@@ -26,13 +25,8 @@ const events = [
   }
 ];
 const Events = () => {
-  const { toast } = useToast();
-  
   const handleConsulta = () => {
-    toast({
-      title: "Agendamento de Consulta",
-      description: "Em breve você será redirecionado para o WhatsApp."
-    });
+    window.open('https://wa.me/5583986547947?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20consulta%20com%20Luana%20Salvino%20Nutricionista.', '_blank');
   };
 
   return (

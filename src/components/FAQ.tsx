@@ -1,6 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 const faqs = [{
   question: "Qual é sua abordagem nutricional?",
   answer: "Baseada em ciência e focada na realidade de cada pessoa. Sem terrorismo alimentar ou dietas restritivas."
@@ -18,17 +17,11 @@ const faqs = [{
   answer: "Sim, com aviso prévio."
 }, {
   question: "Você atende crianças?",
-  answer: "Sim, realizo atendimento infantil com foco em educação alimentar e saúde a longo prazo."
+  answer: "Sim, à partir dos 10 anos de idade"
 }];
 const FAQ = () => {
-  const {
-    toast
-  } = useToast();
   const handleConsulta = () => {
-    toast({
-      title: "Agendamento de Consulta",
-      description: "Em breve você será redirecionado para o WhatsApp."
-    });
+    window.open('https://wa.me/5583986547947?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20consulta%20com%20Luana%20Salvino%20Nutricionista.', '_blank');
   };
   return <section className="pt-12 pb-20 px-6 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />

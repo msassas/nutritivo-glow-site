@@ -1,6 +1,14 @@
 import { Leaf, MapPin, Instagram, MessageCircle } from "lucide-react";
-import logoFooter from "@/assets/logo-footer.png";
+import logoFooter from "@/assets/logo-footer.webp";
+import { trackLead } from "@/utils/facebookPixelIntegration";
+
 const Footer = () => {
+  const handleWhatsAppClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await trackLead({});
+    window.open('https://api.whatsapp.com/send/?phone=5583986547947&text=Ol%C3%A1%21+Quero+agendar+uma+consulta+com+Luana+Salvino+Nutricionista.&type=phone_number&app_absent=0', '_blank');
+  };
+
   const sections = [{
     title: "Contato",
     links: [{
@@ -19,7 +27,7 @@ const Footer = () => {
   }];
   const socialLinks = [{
     icon: <Instagram className="size-5" />,
-    href: "#",
+    href: "https://www.instagram.com/luanasalvinonutri/",
     label: "Instagram"
   }];
   const legalLinks = [{
@@ -43,9 +51,10 @@ const Footer = () => {
           Atendimento presencial na Clínica Virtus - Cajazeiras, PB
         </p>
         <div className="flex flex-col items-center gap-4 mb-6 text-sm">
-          <a 
-            href="https://wa.me/5583999999999" 
-            className="flex items-center gap-2 hover:text-primary transition-colors"
+          <a
+            href="https://api.whatsapp.com/send/?phone=5583986547947&text=Ol%C3%A1%21+Quero+agendar+uma+consulta+com+Luana+Salvino+Nutricionista.&type=phone_number&app_absent=0"
+            onClick={handleWhatsAppClick}
+            className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer"
           >
             <MessageCircle className="w-5 h-5 text-primary" />
             <span>Agendamentos via WhatsApp</span>

@@ -1,7 +1,8 @@
 import { Utensils, MessageSquare, Users, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { trackLead } from "@/utils/facebookPixelIntegration";
+
 const services = [{
   icon: Utensils,
   title: "Planos alimentares personalizados",
@@ -20,14 +21,9 @@ const services = [{
   description: "Mais do que comer bem, é sobre viver melhor. Vamos juntas cuidar de você por completo."
 }];
 const Services = () => {
-  const {
-    toast
-  } = useToast();
-  const handleConsulta = () => {
-    toast({
-      title: "Agendamento de Consulta",
-      description: "Em breve você será redirecionado para o WhatsApp."
-    });
+  const handleConsulta = async () => {
+    await trackLead({});
+    window.open('https://wa.me/5583986547947?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20consulta%20com%20Luana%20Salvino%20Nutricionista.', '_blank');
   };
   return <section className="py-20 px-6 relative overflow-hidden bg-card">
       <div className="absolute bottom-20 right-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />

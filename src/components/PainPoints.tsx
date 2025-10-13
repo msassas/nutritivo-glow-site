@@ -1,6 +1,5 @@
 import { Moon, Heart, Waypoints, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 const painPoints = [
@@ -27,13 +26,8 @@ const painPoints = [
 ];
 
 const PainPoints = () => {
-  const { toast } = useToast();
-  
   const handleConsulta = () => {
-    toast({
-      title: "Agendamento de Consulta",
-      description: "Em breve você será redirecionado para o WhatsApp.",
-    });
+    window.open('https://wa.me/5583986547947?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20consulta%20com%20Luana%20Salvino%20Nutricionista.', '_blank');
   };
   
   return (
@@ -45,7 +39,6 @@ const PainPoints = () => {
           Se você...
         </h2>
         <p className="text-lg text-center text-muted-foreground mb-16 max-w-3xl mx-auto">
-          Você merece um cuidado que te entenda de verdade. Me diga se alguma dessas situações soa familiar:
         </p>
         
         <div className="grid sm:grid-cols-2 gap-0 mb-12 relative z-10">
