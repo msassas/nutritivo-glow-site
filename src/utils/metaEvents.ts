@@ -97,7 +97,7 @@ export const metaEvents = {
    * await metaEvents.lead({
    *   email: 'usuario@exemplo.com',
    *   firstName: 'João',
-   *   phone: '83986547947'
+   *   phone: '83994173887'
    * });
    */
   lead: (data: LeadData): Promise<MetaEventResponse> => {
@@ -171,7 +171,7 @@ export const metaEvents = {
    *   email: 'usuario@exemplo.com',
    *   firstName: 'Maria',
    *   lastName: 'Silva',
-   *   phone: '83986547947'
+   *   phone: '83994173887'
    * });
    */
   completeRegistration: (data: LeadData): Promise<MetaEventResponse> => {

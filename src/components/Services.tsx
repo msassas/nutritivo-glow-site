@@ -1,78 +1,97 @@
 import { Utensils, MessageSquare, Users, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { trackLead } from "@/utils/facebookPixelIntegration";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
 
-const services = [{
-  icon: Utensils,
-  title: "Planos alimentares personalizados",
-  description: "Guias alimentares práticos e reais, feitos sob medida para seus objetivos e desafios."
-}, {
-  icon: MessageSquare,
-  title: "Consultas individuais com acompanhamento constante",
-  description: "Orientação de verdade, com escuta ativa, cuidado e presença em cada etapa."
-}, {
-  icon: Users,
-  title: "Workshops de nutrição",
-  description: "Encontros em grupo para troca de experiências, aprendizado e transformação coletiva."
-}, {
-  icon: Leaf,
-  title: "Mudança de estilo de vida",
-  description: "Mais do que comer bem, é sobre viver melhor. Vamos juntas cuidar de você por completo."
-}];
+const services = [
+  {
+    icon: Utensils,
+    title: "Consulta inicial completa · até 90 minutos",
+    description:
+      "Nada de consulta corrida ou atendimento superficial. Aqui, a gente conversa de verdade sobre sua rotina, seus hábitos, sua relação com a comida e os desafios que têm te impedido de alcançar resultados. Vou entender seu histórico, sua realidade e seus objetivos para construir um plano totalmente personalizado. Mais do que entregar uma dieta, meu objetivo é cuidar de você de forma completa e individualizada.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Plano alimentar personalizado",
+    description:
+      "Esqueça dietas impossíveis e cheias de restrições. Seu plano será pensado de acordo com sua realidade, sua rotina e os alimentos que você gosta de comer. Não gosta de cozinhar? Tem rotina corrida? Come fora com frequência? Tudo isso é levado em consideração. A ideia é criar uma alimentação leve, prática e sustentável — sem sofrimento e sem radicalismo.",
+  },
+  {
+    icon: Users,
+    title: "Acompanhamento de perto",
+    description:
+      "Você não vai passar por esse processo sozinha. Durante o acompanhamento, ajustamos o plano sempre que necessário e acompanhamos sua evolução de forma próxima e humanizada. Teve viagem? Aniversário? Saiu da rotina? Tá tudo bem. A vida acontece — e eu vou te ajudar a encontrar equilíbrio sem culpa e sem desistir.",
+  },
+  {
+    icon: Leaf,
+    title: "Resultados que você sente (e vê)",
+    description:
+      "Muito além da balança, você começa a perceber mudanças reais na sua disposição, energia, autoestima e relação com a comida. Nas primeiras semanas, muitas pacientes já relatam menos inchaço, mais saciedade, mais energia no dia a dia, melhora na autoestima e mais leveza — física e emocional. E o melhor: resultados sustentáveis, sem efeito sanfona e sem precisar viver de dieta restritiva.",
+  },
+];
+
 const Services = () => {
-  const handleConsulta = async () => {
-    await trackLead({});
-    window.open('https://wa.me/5583986547947?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20consulta%20com%20Luana%20Salvino%20Nutricionista.', '_blank');
+  const handleClick = () => {
+    trackLead({}).catch((err) => {
+      console.error("Erro ao rastrear lead:", err);
+    });
   };
-  return <section className="py-20 px-6 relative overflow-hidden bg-card">
-      <div className="absolute bottom-20 right-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
-      
+
+  return (
+    <section className="py-20 sm:py-24 px-6 relative overflow-hidden bg-[hsl(var(--secondary))]">
+      <div className="absolute bottom-20 right-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+
       <div className="container max-w-6xl mx-auto relative z-10">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-16 animate-fade-in">
-          Como posso te ajudar
-        </h2>
-        <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
-          Minha abordagem é personalizada e respeita seu ritmo de vida. Não existe receita padrão, existe um plano feito para você.
-        </p>
-        
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-0 mb-12 relative z-10">
+        <div className="text-center mb-14 max-w-3xl mx-auto px-4">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-accent mb-4">
+            O acompanhamento
+          </p>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in break-words">
+            Como funciona o acompanhamento que já transformou 200+ vidas em Cajazeiras
+          </h2>
+          <div className="divider-gold w-24 mx-auto mt-6" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-14 relative z-10">
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <div
+              <article
                 key={index}
-                className={cn(
-                  "flex flex-col border-border py-10 relative group/feature animate-fade-in-up",
-                  "lg:border-r",
-                  (index === 0) && "lg:border-l",
-                  "sm:border-b lg:border-b-0"
-                )}
+                className="group flex flex-col rounded-[10px] border border-accent/15 bg-[hsl(var(--card)/0.5)] p-6 sm:p-7 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent/35 hover:bg-[hsl(var(--card)/0.75)] hover:shadow-soft animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-primary/5 to-transparent pointer-events-none" />
-                
-                <div className="mb-4 relative z-10 px-6 sm:px-10 flex justify-center">
-                  <Icon className="w-10 h-10 sm:w-12 sm:h-12 text-primary/70 group-hover/feature:text-primary transition-colors duration-200 stroke-[1.5]" />
+                <div className="mb-5 inline-flex items-center justify-center w-12 h-12 rounded-full border border-accent/40 bg-[hsl(var(--secondary)/0.6)] text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
+                  <Icon className="w-5 h-5 stroke-[1.5]" />
                 </div>
-                <div className="text-sm sm:text-base font-bold mb-2 relative z-10 px-6 sm:px-10 text-center">
-                  <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-border group-hover/feature:bg-primary transition-all duration-200 origin-center" />
-                  <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block leading-tight">
-                    {service.title}
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-muted-foreground relative z-10 px-6 sm:px-10 leading-relaxed text-center">
+                <h3 className="font-display text-base sm:text-lg font-semibold mb-3 leading-snug text-foreground">
+                  {service.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-foreground/75 leading-relaxed">
                   {service.description}
                 </p>
-              </div>
+              </article>
             );
           })}
         </div>
-        
-        <div className="flex justify-center">
-          <Button variant="pill" size="xl" onClick={handleConsulta} className="w-full sm:w-auto animate-scale-in">QUERO ESSA MUDANÇA </Button>
+
+        <div className="flex justify-center px-4">
+          <Button
+            asChild
+            variant="pill"
+            size="xl"
+            onClick={handleClick}
+            className="w-full sm:w-auto animate-scale-in text-xs sm:text-sm px-6 py-3 whitespace-normal h-auto min-h-[44px] touch-manipulation cursor-pointer"
+            style={{ WebkitTapHighlightColor: "transparent" }}
+          >
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              Quero meu plano feito pra mim
+            </a>
+          </Button>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Services;

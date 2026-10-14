@@ -1,91 +1,87 @@
 import { Moon, Heart, Waypoints, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
 
 const painPoints = [
   {
     icon: Moon,
-    title: "Sente cansaço o tempo todo",
-    description: "Falta de energia, mente confusa, corpo pesado — e nenhuma dieta resolve.",
+    title: "Já tentou várias dietas mas sempre volta ao peso inicial",
+    description: "Ou ganha mais ainda. O efeito sanfona está te deixando louca e você não aguenta mais recomeçar do zero.",
   },
   {
     icon: Heart,
-    title: "Tem uma relação difícil com a comida",
-    description: "Entre dietas, culpa e recomeços, você sente que nunca consegue manter o equilíbrio.",
+    title: "Sente vergonha do próprio corpo",
+    description: "Evita tirar fotos, usar certas roupas. Olha no espelho e não se reconhece mais.",
   },
   {
     icon: Waypoints,
-    title: "Não sabe por onde começar",
-    description: "São tantas informações e modismos que tudo parece confuso demais.",
+    title: "Está sempre cansada, mesmo depois de dormir bem",
+    description: "Parece que falta energia no corpo. Às vezes nem consegue ter disposição para brincar com os filhos.",
   },
   {
     icon: Leaf,
-    title: "Quer emagrecer de forma sustentável",
-    description: "Você está cansada de soluções temporárias. O que busca é mudança duradoura, com saúde.",
+    title: "Come escondido ou sente culpa depois de comer",
+    description: "Algo que é 'proibido'. A relação com a comida virou um ciclo de restrição e culpa.",
   },
 ];
 
 const PainPoints = () => {
-  const handleConsulta = () => {
-    window.open('https://wa.me/5583986547947?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20consulta%20com%20Luana%20Salvino%20Nutricionista.', '_blank');
-  };
-  
   return (
-    <section className="py-12 px-6 relative overflow-hidden">
+    <section className="py-20 sm:py-24 px-4 sm:px-6 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-      
+
       <div className="container max-w-6xl mx-auto relative z-10">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-8 animate-fade-in">
-          Se você...
-        </h2>
-        <p className="text-lg text-center text-muted-foreground mb-16 max-w-3xl mx-auto">
-        </p>
-        
-        <div className="grid sm:grid-cols-2 gap-0 mb-12 relative z-10">
+        <div className="text-center mb-14 max-w-3xl mx-auto px-4">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-accent mb-4">
+            Reconhece esses sinais?
+          </p>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in">
+            Você se identifica com alguma dessas situações?
+          </h2>
+          <div className="divider-gold w-24 mx-auto mt-6" />
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-0 mb-14 relative z-10 border border-accent/15 rounded-[10px] overflow-hidden bg-[hsl(var(--secondary)/0.4)]">
           {painPoints.map((point, index) => {
             const Icon = point.icon;
             return (
               <div
                 key={index}
                 className={cn(
-                  "flex flex-col border-border py-10 relative group/feature animate-fade-in-up",
-                  "sm:border-r",
-                  (index === 0 || index === 2) && "sm:border-l",
-                  index < 2 && "sm:border-b"
+                  "flex flex-col py-10 relative group/feature animate-fade-in-up transition-colors duration-300",
+                  "sm:border-r border-accent/15",
+                  (index === 1 || index === 3) && "sm:border-r-0",
+                  index < 2 && "sm:border-b",
+                  "hover:bg-[hsl(var(--card)/0.4)]"
                 )}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {index < 2 && (
-                  <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-primary/5 to-transparent pointer-events-none" />
-                )}
-                {index >= 2 && (
-                  <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-                )}
                 <div className="mb-4 relative z-10 px-6 sm:px-10">
-                  <Icon className="w-10 h-10 sm:w-12 sm:h-12 text-primary/70 group-hover/feature:text-primary transition-colors duration-200 stroke-[1.5]" />
+                  <Icon className="w-9 h-9 sm:w-10 sm:h-10 text-accent stroke-[1.5]" />
                 </div>
-                <div className="text-lg font-bold mb-2 relative z-10 px-6 sm:px-10">
-                  <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-border group-hover/feature:bg-primary transition-all duration-200 origin-center" />
-                  <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block">
-                    {point.title}
-                  </span>
+                <div className="font-display text-lg sm:text-xl font-semibold mb-2 relative z-10 px-6 sm:px-10 leading-snug text-foreground">
+                  {point.title}
                 </div>
-                <p className="text-sm sm:text-base text-muted-foreground relative z-10 px-6 sm:px-10 leading-relaxed">
+                <p className="text-sm sm:text-base text-foreground/75 relative z-10 px-6 sm:px-10 leading-relaxed">
                   {point.description}
                 </p>
               </div>
             );
           })}
         </div>
-        
-        <div className="flex justify-center">
-          <Button 
-            variant="pill" 
-            size="xl" 
-            onClick={handleConsulta}
-            className="w-full sm:w-auto animate-scale-in"
+
+        <div className="flex justify-center px-4">
+          <Button
+            asChild
+            variant="pill"
+            size="xl"
+            className="w-full sm:w-auto animate-scale-in text-xs sm:text-sm px-6 py-3 whitespace-normal h-auto min-h-[44px] touch-manipulation cursor-pointer"
+            style={{ WebkitTapHighlightColor: "transparent" }}
           >
-            Sim, eu preciso disso
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              Sim, quero mudar essa realidade
+            </a>
           </Button>
         </div>
       </div>

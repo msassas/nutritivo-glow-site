@@ -33,3 +33,28 @@ server/.env
 
 # Vercel
 .vercel
+
+# Environment variants and local credentials
+.env.*
+!.env.example
+!.env.*.example
+.npmrc
+.aws/
+credentials.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local tools, backups, archives, and migration checks
+.claude/
+.codex/
+*.backup
+*.bak
+*.tmp
+*.temp
+/nul
+/blog-luana.zip
+/blog-luana/
+/.cloudflare-check-*/

@@ -64,7 +64,7 @@ Install Command: npm install
 3. Adicione as seguintes variáveis:
 
 ```env
-META_ACCESS_TOKEN = EAAc3EcZA8WXUBPo3vxBasVrJ7nTQFOFqKyzgaOC8wqJcveas3cBZAEFRQ8te6ZAfOwHjoPSuUdFwzBrPe3sX5bCd1jURg0IFiAbm8uucWKcpzNGukE6mIWAP7NcnPz2JgYkCYJpNg9wjfNhuDYnQp3lHs4CTJXUGg5WFInatKPbxlE4ZAY167vfiXhlunuCgMQZDZD
+META_ACCESS_TOKEN = META_ACCESS_TOKEN
 
 PORT = 3001
 

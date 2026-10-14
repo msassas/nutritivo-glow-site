@@ -2,55 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Premium design system — taupe/cream palette. All colors MUST be HSL. */
 
 @layer base {
   :root {
-    --background: 25 20% 96%;
-    --foreground: 0 0% 15%;
+    /* Brand hex reference:
+       #877365 taupe background, #F5EFE7 cream, #E8DCC9 warm cream,
+       #3D2F26 deep brown, #D4B896 soft gold, #9C8676 light card,
+       #6F5D52 dark card */
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 15%;
+    --background: 25 14% 46%;
+    --foreground: 34 41% 93%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 15%;
+    --card: 25 16% 54%;
+    --card-foreground: 34 41% 93%;
 
-    --primary: 25 18% 41%;
-    --primary-foreground: 0 0% 100%;
+    --popover: 23 15% 38%;
+    --popover-foreground: 34 41% 93%;
 
-    --secondary: 25 20% 92%;
-    --secondary-foreground: 0 0% 15%;
+    --primary: 34 41% 93%;
+    --primary-foreground: 24 23% 19%;
 
-    --muted: 25 20% 94%;
-    --muted-foreground: 0 0% 45%;
+    --primary-hover: 37 40% 85%;
 
-    --accent: 25 18% 41%;
-    --accent-foreground: 0 0% 100%;
+    --secondary: 23 15% 38%;
+    --secondary-foreground: 34 41% 93%;
 
-    --destructive: 0 84.2% 60.2%;
+    --muted: 25 16% 54%;
+    --muted-foreground: 34 30% 86%;
+
+    --accent: 33 42% 71%;
+    --accent-foreground: 24 23% 19%;
+
+    --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 25 20% 88%;
-    --input: 25 20% 88%;
-    --ring: 25 18% 41%;
+    --border: 33 42% 71%;
+    --input: 25 16% 54%;
+    --ring: 33 42% 71%;
 
-    --radius: 1.5rem;
+    --radius: 0.5rem;
 
-    --shadow-soft: 0 8px 24px -4px hsl(25 18% 41% / 0.12);
-    --shadow-card: 0 2px 12px -2px hsl(25 18% 41% / 0.08);
-    --shadow-glow: 0 0 40px hsl(25 18% 41% / 0.15);
+    --shadow-soft: 0 8px 24px -6px hsl(24 23% 12% / 0.25);
+    --shadow-card: 0 2px 12px -2px hsl(24 23% 12% / 0.18);
+    --shadow-glow: 0 12px 36px -8px hsl(33 42% 71% / 0.35);
   }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+    @apply bg-[hsl(var(--card)/0.6)] backdrop-blur-xl border border-[hsl(var(--accent)/0.25)];
   }
-  
+
   .glass-dark {
-    @apply bg-card/80 backdrop-blur-xl border border-primary/10;
+    @apply bg-[hsl(var(--secondary)/0.7)] backdrop-blur-xl border border-[hsl(var(--accent)/0.2)];
+  }
+
+  .text-gold {
+    color: hsl(var(--accent));
+  }
+
+  .divider-gold {
+    background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.6), transparent);
+    height: 1px;
+  }
+
+  .font-display {
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -60,6 +79,48 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Garantir que textos longos quebrem corretamente */
+  h1, h2, h3, h4, h5, h6, p, span, li, a, button {
+    @apply break-words;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Evitar overflow horizontal */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Garantir que imagens sejam responsivas */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Ajuste para containers */
+  .container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Responsividade melhorada para inputs e botoes */
+  input, button, textarea {
+    @apply w-full;
+    max-width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    input:not(.w-full), button:not(.w-full), textarea:not(.w-full) {
+      width: auto;
+    }
   }
 }

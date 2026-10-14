@@ -15,9 +15,9 @@ const Hero = memo(() => {
 
   return (
     <AuroraBackground className="min-h-screen bg-background">
-      <section className="min-h-screen flex items-center relative overflow-hidden w-full">
+      <section className="min-h-screen lg:flex lg:items-center relative overflow-hidden w-full">
         <div className="w-full relative z-10">
-          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4 lg:gap-12 items-center min-h-screen py-8 sm:py-10 lg:py-0">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4 lg:gap-12 lg:items-center lg:min-h-screen pt-6 pb-8 sm:pt-8 sm:pb-10 lg:py-0">
             {/* Content - Top on mobile, Left on desktop */}
             <div className="w-full px-4 sm:px-6 lg:px-16 flex items-center justify-center order-1 lg:order-1">
               <div className="max-w-xl w-full text-center lg:text-left animate-fade-in space-y-5 lg:space-y-6">
@@ -33,9 +33,9 @@ const Hero = memo(() => {
                   />
                 </div>
 
-                <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-semibold leading-tight break-words px-2 text-foreground">
-                  Emagreça de verdade.
-                  <span className="block text-accent mt-2">Sem sofrer. Sem cortar o que você ama.</span>
+                <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-semibold leading-tight px-2 text-foreground">
+                  Vamos construir juntos uma relação mais leve
+                  <span className="block text-accent mt-2">com a comida e com você mesma.</span>
                 </h1>
 
                 <div className="divider-gold w-20 mx-auto lg:mx-0" />

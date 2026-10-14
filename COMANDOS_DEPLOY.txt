@@ -53,7 +53,7 @@ git push -u origin main
 # Adicione estas 4 variáveis:
 
 # Nome: META_ACCESS_TOKEN
-# Valor: EAAc3EcZA8WXUBPo3vxBasVrJ7nTQFOFqKyzgaOC8wqJcveas3cBZAEFRQ8te6ZAfOwHjoPSuUdFwzBrPe3sX5bCd1jURg0IFiAbm8uucWKcpzNGukE6mIWAP7NcnPz2JgYkCYJpNg9wjfNhuDYnQp3lHs4CTJXUGg5WFInatKPbxlE4ZAY167vfiXhlunuCgMQZDZD
+# Valor: META_ACCESS_TOKEN
 
 # Nome: PORT
 # Valor: 3001

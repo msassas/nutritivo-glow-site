@@ -1,0 +1,5 @@
+# No catch-all rewrite: preserve the prerendered home, blog, and article HTML.
+# Cloudflare Pages serves matching static files first and provides the SPA
+# fallback to /index.html when no top-level 404.html exists.
+# The Apache .htaccess fallback therefore needs no explicit Pages rewrite.
+# Do not add domain or HTTPS redirects here as part of this migration.
