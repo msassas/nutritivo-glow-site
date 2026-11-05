@@ -27,8 +27,10 @@
     if (p.get('gclid') || p.get('gbraid') || p.get('wbraid') ||
         (src === 'google' && (med === 'cpc' || med === 'paid'))) return 'google_ads';
 
-    if (/^(facebook|instagram|fb|ig)$/.test(src) &&
-        (med === 'cpc' || med === 'paid' || med === 'paid_social')) return 'meta_ads';
+    var srcMeta = /^(facebook|instagram|fb|ig)$/.test(src);
+    if (srcMeta && (med === 'cpc' || med === 'paid' || med === 'paid_social')) return 'meta_ads';
+    // utm do Instagram/Facebook sem mídia paga (ex.: link da bio, utm_medium=bio).
+    if (srcMeta) return 'instagram';
 
     var host = '';
     try { host = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ''; } catch (e) {}
