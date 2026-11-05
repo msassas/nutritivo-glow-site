@@ -9,8 +9,10 @@ const Footer = () => {
     e: React.MouseEvent<HTMLAnchorElement>,
   ) => {
     e.preventDefault();
+    // Usa o href do link: o /origem.js troca a mensagem conforme a origem.
+    const url = e.currentTarget.href || WHATSAPP_URL;
     await trackLead({});
-    window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const socialLinks = [
