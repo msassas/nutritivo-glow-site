@@ -81,7 +81,7 @@
     overflow-x: hidden;
   }
   button, input { font: inherit; color: inherit; }
-  button { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  button, a { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
   [tabindex="-1"]:focus { outline: none; }
   [hidden] { display: none !important; }
@@ -93,10 +93,10 @@
     display: flex;
     justify-content: center;
     padding:
-      max(12px, env(safe-area-inset-top))
-      max(12px, env(safe-area-inset-right))
-      max(12px, env(safe-area-inset-bottom))
-      max(12px, env(safe-area-inset-left));
+      max(8px, env(safe-area-inset-top))
+      max(8px, env(safe-area-inset-right))
+      max(8px, env(safe-area-inset-bottom))
+      max(8px, env(safe-area-inset-left));
   }
   .card {
     width: 100%;
@@ -106,7 +106,7 @@
     border: 1px solid rgba(212, 184, 150, 0.2);
     border-radius: 1rem;
     box-shadow: var(--shadow-soft);
-    padding: 20px 20px 18px;
+    padding: 8px 18px 14px;
     display: flex;
     flex-direction: column;
   }
@@ -117,9 +117,9 @@
   main { flex: 1; display: flex; flex-direction: column; }
 
   /* Topo: voltar + progresso */
-  .topbar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+  .topbar { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+  .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .back {
-    align-self: flex-start;
     width: auto;
     background: none;
     border: 0;
@@ -129,7 +129,6 @@
     font-size: 14px;
     font-weight: 500;
   }
-  .back:hover { color: var(--cream); }
   .progress { display: flex; gap: 6px; }
   .progress span {
     flex: 1;
@@ -196,14 +195,13 @@
     box-shadow: var(--shadow-card);
     transition: background-color 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s ease-out;
   }
-  .btn:hover { background: var(--cream-warm); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+  .btn:active { transform: scale(0.98); }
   .btn-pulse { animation: pulse 2.4s ease-in-out infinite; }
   @keyframes pulse {
     0%, 100% { box-shadow: var(--shadow-card), 0 0 0 0 rgba(212, 184, 150, 0.45); }
     50% { box-shadow: var(--shadow-card), 0 0 0 10px rgba(212, 184, 150, 0); }
   }
   .btn-whatsapp { background: var(--whatsapp); color: var(--brown); }
-  .btn-whatsapp:hover { background: #3fdc79; }
   .btn-whatsapp svg { width: 22px; height: 22px; flex-shrink: 0; }
 
   .link {
@@ -218,25 +216,25 @@
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .link:hover { color: var(--cream); }
 
-  /* Perguntas */
-  .question h2 { font-size: 26px; margin-bottom: 20px; }
-  .options { display: flex; flex-direction: column; gap: 10px; }
+  /* Perguntas: as 7 opções cabem sem rolar no navegador do Instagram (~390x660) */
+  .question h2 { font-size: 23px; margin-bottom: 14px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
   .opt {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     width: 100%;
-    min-height: 60px;
-    padding: 14px 16px;
+    min-height: 50px;
+    padding: 9px 14px;
     text-align: left;
+    line-height: 1.3;
     background: rgba(245, 239, 231, 0.05);
     border: 1px solid rgba(212, 184, 150, 0.3);
     border-radius: 0.75rem;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.1s ease;
   }
-  .opt:hover { border-color: var(--gold); background: rgba(245, 239, 231, 0.08); }
+  .opt:active { transform: scale(0.985); }
   .opt[aria-pressed="true"] { border-color: var(--gold); background: rgba(212, 184, 150, 0.14); }
   .dot {
     flex-shrink: 0;
@@ -255,11 +253,19 @@
     background: var(--gold);
   }
   .opt-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .opt-label { font-size: 16px; font-weight: 500; color: var(--cream); }
-  .opt-sub { font-size: 13px; color: var(--cream-warm); }
+  .opt-label { font-size: 15px; font-weight: 500; color: var(--cream); }
+  .opt-sub { font-size: 12.5px; color: var(--cream-warm); }
+
+  /* Hover só em quem tem mouse: no toque, o hover "gruda" depois do clique */
+  @media (hover: hover) {
+    .back:hover, .link:hover { color: var(--cream); }
+    .btn:hover { background: var(--cream-warm); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .btn-whatsapp:hover { background: #3fdc79; }
+    .opt:hover { border-color: var(--gold); background: rgba(245, 239, 231, 0.08); }
+  }
 
   /* Nome */
-  .name-step h2 { font-size: 26px; margin: 8px 0 20px; }
+  .name-step h2 { font-size: 24px; margin: 8px 0 18px; }
   .field {
     width: 100%;
     min-height: 56px;
@@ -276,7 +282,7 @@
   .center { text-align: center; margin-top: 8px; }
 
   /* Final */
-  .final h2 { font-size: 26px; margin-bottom: 12px; }
+  .final h2 { font-size: 24px; margin-bottom: 10px; }
   .final p.lead { margin: 0 0 20px; color: var(--cream-warm); font-size: 15px; }
   .summary {
     margin: 0 0 22px;
@@ -292,7 +298,7 @@
   .final .hint { text-align: center; margin-top: 12px; }
 
   footer {
-    margin-top: 28px;
+    margin-top: 24px;
     padding-top: 14px;
     border-top: 1px solid rgba(212, 184, 150, 0.15);
     text-align: center;
@@ -316,13 +322,15 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
   <div class="card">
     <main>
       <div class="topbar" id="topbar" hidden>
-        <button type="button" class="back" id="back" aria-label="Voltar para a etapa anterior">← Voltar</button>
+        <div class="topbar-row">
+          <button type="button" class="back" id="back" aria-label="Voltar para a etapa anterior">← Voltar</button>
+          <p class="step-label" id="step-label"></p>
+        </div>
         <div id="progress-wrap">
           <div class="progress" id="progress" role="progressbar" aria-label="Progresso do questionário" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
             <span></span><span></span><span></span>
           </div>
         </div>
-        <p class="step-label" id="step-label"></p>
       </div>
 
       <!-- Tela 1: abertura -->
@@ -378,7 +386,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
         </a>
         <p class="hint">Você será levada ao WhatsApp com a mensagem pronta.</p>
         <div class="center" id="insta-wrap" hidden>
-          <a class="link" href="https://www.instagram.com/luanasalvinonutri/" target="_blank" rel="noopener noreferrer">Prefiro conhecer o conteúdo no Instagram primeiro</a>
+          <a class="link" id="instagram" href="https://www.instagram.com/luanasalvinonutri/" target="_blank" rel="noopener noreferrer">Prefiro conhecer o conteúdo no Instagram primeiro</a>
         </div>
       </section>
     </main>
@@ -408,7 +416,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
       { id: 'outro', label: 'Outro objetivo' }
     ],
     atendimento: [
-      { id: 'presencial', label: 'Presencial em Cajazeiras' },
+      { id: 'presencial', label: 'Presencial em Cajazeiras-PB' },
       { id: 'online', label: 'Online', sub: 'de qualquer lugar do Brasil' }
     ],
     inicio: [
@@ -426,6 +434,8 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
   var current = 'intro';
   var advancing = false;
   var lastTrackedKey = null;
+  var quizStarted = false;
+  var leadSent = false;
 
   var $ = function (id) { return document.getElementById(id); };
   var screens = {};
@@ -579,7 +589,13 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     renderSelection('objetivo');
   }
 
+  // Funil de cliques no pixel: QuizIniciado → QuizConcluido → Lead/Contact.
+  // "entrada" diz só se veio de link com tema, sem dizer qual tema.
   $('start').addEventListener('click', function () {
+    if (!quizStarted) {
+      quizStarted = true;
+      track('trackCustom', 'QuizIniciado', { entrada: answers.objetivo ? 'link_com_tema' : 'padrao' });
+    }
     go(answers.objetivo ? 'q2' : 'q1');
   });
   $('back').addEventListener('click', function () {
@@ -590,11 +606,17 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
   $('name-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { e.preventDefault(); submitName(false); }
   });
+  // Lead uma vez por visita, para cliques repetidos não inflarem a campanha.
   $('whatsapp').addEventListener('click', function () {
+    if (leadSent) return;
+    leadSent = true;
     track('track', 'Lead', {
       content_category: findOption('atendimento', answers.atendimento).label
     });
     track('track', 'Contact');
+  });
+  $('instagram').addEventListener('click', function () {
+    track('trackCustom', 'CliqueInstagram');
   });
 })();
 </script>
