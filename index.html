@@ -154,6 +154,31 @@
     });
     </script>
 
+    <!-- Google Ads tag + conversão de clique no WhatsApp -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18558420761"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'AW-18558420761');
+
+    // Conta como conversão só links de conversa com um número (wa.me/5583...
+    // ou api.whatsapp.com/send?phone=...). Links de compartilhar (wa.me/?text=)
+    // ficam de fora.
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href') || '';
+      if (!/wa\.me\/\d|api\.whatsapp\.com\/send\?(.*&)?phone=\d/.test(href)) return;
+      gtag('event', 'conversion', {
+        send_to: 'AW-18558420761/BZ3eCOGs6rIdEJmOrJFF',
+        value: 1.0,
+        currency: 'BRL'
+      });
+    }, true);
+    </script>
+
     <!-- Meta Pixel Code - Deferred with requestIdleCallback -->
     <script>
     (function() {
