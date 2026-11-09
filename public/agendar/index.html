@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+(function(c,l,a,r,i,t,y){
+c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "tr6dsp4k8l");
+</script>
 <title>Agendar consulta · Nutricionista Luana Salvino</title>
 <meta name="description" content="Responda 3 perguntas rápidas e agende sua consulta nutricional com a Nutricionista Luana Salvino, presencial em Cajazeiras-PB ou Icó-CE, ou online.">
 <!-- Página de anúncio: fora do Google. Não afeta o SEO do resto do site. -->
@@ -26,6 +35,8 @@
       var params = new URLSearchParams(location.search);
       window.__objetivoParam = params.get('objetivo');
       if (window.__objetivoParam !== null) {
+        // Marca a sessão do Clarity com o objetivo antes de tirá-lo da URL.
+        if (window.clarity) clarity('set', 'objetivo', window.__objetivoParam);
         params.delete('objetivo');
         var qs = params.toString();
         history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
@@ -478,6 +489,14 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     }
   }
 
+  function clarityEvent(name) {
+    if (window.clarity) {
+      try { window.clarity('event', name); } catch (e) {}
+    }
+  }
+
+  var QUESTION_NUMBER = { objetivo: 1, atendimento: 2, inicio: 3 };
+
   function findOption(key, id) {
     var list = QUESTIONS[key];
     for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
@@ -513,6 +532,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     if (advancing) return;
     answers[key] = id;
     renderSelection(key);
+    clarityEvent('quiz_pergunta_' + QUESTION_NUMBER[key]);
     advancing = true;
     var from = current;
     setTimeout(function () {
@@ -598,6 +618,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
         atendimento: findOption('atendimento', answers.atendimento).label,
         inicio: findOption('inicio', answers.inicio).label
       });
+      clarityEvent('QuizConcluido');
     }
   }
 
@@ -624,6 +645,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     if (!quizStarted) {
       quizStarted = true;
       track('trackCustom', 'QuizIniciado', { entrada: answers.objetivo ? 'link_com_tema' : 'padrao' });
+      clarityEvent('QuizIniciado');
     }
     go(answers.objetivo ? 'q2' : 'q1');
   });
@@ -637,12 +659,15 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
   });
   // Lead uma vez por visita, para cliques repetidos não inflarem a campanha.
   $('whatsapp').addEventListener('click', function () {
+    clarityEvent('quiz_whatsapp');
     if (leadSent) return;
     leadSent = true;
     track('track', 'Lead', {
       content_category: findOption('atendimento', answers.atendimento).label
     });
     track('track', 'Contact');
+    clarityEvent('Lead');
+    clarityEvent('Contact');
   });
   $('instagram').addEventListener('click', function () {
     track('trackCustom', 'CliqueInstagram');
