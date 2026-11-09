@@ -35,8 +35,14 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       var params = new URLSearchParams(location.search);
       window.__objetivoParam = params.get('objetivo');
       if (window.__objetivoParam !== null) {
-        // Marca a sessão do Clarity com o objetivo antes de tirá-lo da URL.
-        if (window.clarity) clarity('set', 'objetivo', window.__objetivoParam);
+        // Marca a sessão do Clarity com um código neutro do anúncio
+        // (sem o tema de saúde) antes de tirar o objetivo da URL.
+        var ANUNCIO = {
+          intestino: 'anuncio_A', lipedema: 'anuncio_B', caneta: 'anuncio_C',
+          mulher: 'anuncio_D', emagrecimento: 'anuncio_E', hipertrofia: 'anuncio_F'
+        };
+        var codigo = ANUNCIO.hasOwnProperty(window.__objetivoParam) ? ANUNCIO[window.__objetivoParam] : 'anuncio_outro';
+        if (window.clarity) clarity('set', 'objetivo', codigo);
         params.delete('objetivo');
         var qs = params.toString();
         history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
@@ -413,7 +419,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
       <section class="screen final" data-screen="final" aria-labelledby="t-final" hidden>
         <h2 id="t-final" tabindex="-1">Pronto! Agora é só enviar a mensagem.</h2>
         <p class="lead" id="final-text">Suas respostas já vão na mensagem. Assim a equipe de atendimento te passa os horários certos.</p>
-        <dl class="summary" aria-label="Resumo das suas respostas">
+        <dl class="summary" data-clarity-mask="true" aria-label="Resumo das suas respostas">
           <div id="sum-name-row" hidden><dt>Nome</dt><dd id="sum-name"></dd></div>
           <div><dt>Objetivo</dt><dd id="sum-objetivo"></dd></div>
           <div><dt>Atendimento</dt><dd id="sum-atendimento"></dd></div>
@@ -432,7 +438,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
 
     <footer>
       <p>Nutricionista Luana Salvino · CRN 48391/P</p>
-      <p>Seus dados não ficam salvos nesta página.</p>
+      <p>Usamos ferramentas de análise para melhorar esta página. Suas respostas não são armazenadas.</p>
     </footer>
   </div>
 </div>
@@ -512,6 +518,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
       b.className = 'opt';
       b.setAttribute('aria-pressed', 'false');
       b.setAttribute('data-id', opt.id);
+      b.setAttribute('data-clarity-mask', 'true');
       b.innerHTML = '<span class="dot" aria-hidden="true"></span><span class="opt-text"><span class="opt-label"></span>' +
         (opt.sub ? '<span class="opt-sub"></span>' : '') + '</span>';
       b.querySelector('.opt-label').textContent = opt.label;
