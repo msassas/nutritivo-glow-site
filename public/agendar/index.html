@@ -4,16 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
+<script>
+  // Modo de teste: em localhost (ou com ?teste_pixel=1) nada é enviado ao Meta,
+  // Google ou Clarity. Os eventos aparecem no console como [pixel teste].
+  window.__QUIZ_TESTE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ||
+    /[?&]teste_pixel=1(&|$)/.test(location.search);
+</script>
+
 <!-- Microsoft Clarity -->
 <script type="text/javascript">
+if (!window.__QUIZ_TESTE) {
 (function(c,l,a,r,i,t,y){
 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 })(window, document, "clarity", "script", "tr6dsp4k8l");
+}
 </script>
 <title>Agendar consulta · Nutricionista Luana Salvino</title>
-<meta name="description" content="Responda 3 perguntas rápidas e agende sua consulta nutricional com a Nutricionista Luana Salvino, presencial em Cajazeiras-PB ou Icó-CE, ou online.">
+<meta name="description" content="Responda algumas perguntas rápidas e agende sua consulta nutricional com a Nutricionista Luana Salvino, presencial em Cajazeiras-PB ou Icó-CE, ou online.">
 <!-- Página de anúncio: fora do Google. Não afeta o SEO do resto do site. -->
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#877365">
@@ -28,20 +37,21 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 <script src="/origem.js?v=2"></script>
 
 <script>
-  // Lê o ?objetivo= e o tira da URL ANTES do pixel carregar,
+  // Lê o ?objetivo= e tira SÓ ele da URL, ANTES do pixel carregar,
   // para o tema de saúde não ir junto na URL do PageView.
+  // O fbclid, gclid e as utm_ continuam na URL: o pixel lê o fbclid
+  // logo depois e cria o cookie _fbc normalmente.
   (function () {
+    // Código neutro do anúncio (sem o tema de saúde), usado no Clarity e no pixel.
+    window.__ANUNCIO = {
+      intestino: 'anuncio_A', lipedema: 'anuncio_B', caneta: 'anuncio_C',
+      mulher: 'anuncio_D', emagrecimento: 'anuncio_E', hipertrofia: 'anuncio_F'
+    };
     try {
       var params = new URLSearchParams(location.search);
       window.__objetivoParam = params.get('objetivo');
       if (window.__objetivoParam !== null) {
-        // Marca a sessão do Clarity com um código neutro do anúncio
-        // (sem o tema de saúde) antes de tirar o objetivo da URL.
-        var ANUNCIO = {
-          intestino: 'anuncio_A', lipedema: 'anuncio_B', caneta: 'anuncio_C',
-          mulher: 'anuncio_D', emagrecimento: 'anuncio_E', hipertrofia: 'anuncio_F'
-        };
-        var codigo = ANUNCIO.hasOwnProperty(window.__objetivoParam) ? ANUNCIO[window.__objetivoParam] : 'anuncio_outro';
+        var codigo = window.__ANUNCIO.hasOwnProperty(window.__objetivoParam) ? window.__ANUNCIO[window.__objetivoParam] : 'anuncio_outro';
         if (window.clarity) clarity('set', 'objetivo', codigo);
         params.delete('objetivo');
         var qs = params.toString();
@@ -68,19 +78,36 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   // para que o texto das respostas e o nome não sejam enviados ao Meta.
   fbq('set', 'autoConfig', false, PIXEL_ID);
   fbq('init', PIXEL_ID);
-  fbq('track', 'PageView');
+
+  // Todos os eventos do quiz passam por aqui. No modo de teste, só vão para o console.
+  window.__pixelLog = [];
+  window.__pixel = function () {
+    var args = Array.prototype.slice.call(arguments);
+    if (window.__QUIZ_TESTE) {
+      window.__pixelLog.push(args);
+      console.log('[pixel teste]', JSON.stringify(args));
+      return;
+    }
+    try { fbq.apply(null, args); } catch (e) {}
+  };
+  window.__pixel('track', 'PageView');
 </script>
 <!-- End Meta Pixel -->
 
 <!-- Google Ads tag + conversão de clique no WhatsApp -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18558420761"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   window.gtag = gtag;
-  gtag('js', new Date());
-  gtag('config', 'AW-18558420761');
-  gtag('config', 'G-4X0B452GMT');
+  if (!window.__QUIZ_TESTE) {
+    var gt = document.createElement('script');
+    gt.async = true;
+    gt.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18558420761';
+    document.head.appendChild(gt);
+    gtag('js', new Date());
+    gtag('config', 'AW-18558420761');
+    gtag('config', 'G-4X0B452GMT');
+  }
 
   // Conta como conversão só links de conversa com um número (wa.me/5583...
   // ou api.whatsapp.com/send?phone=...). Links de compartilhar ficam de fora.
@@ -89,6 +116,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     if (!a) return;
     var href = a.getAttribute('href') || '';
     if (!/wa\.me\/\d|api\.whatsapp\.com\/send\?(.*&)?phone=\d/.test(href)) return;
+    if (window.__QUIZ_TESTE) { console.log('[google ads teste] conversion'); return; }
     gtag('event', 'conversion', {
       send_to: 'AW-18558420761/BZ3eCOGs6rIdEJmOrJFF',
       value: 1.0,
@@ -211,12 +239,26 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   h1 em, h2 em { font-style: italic; color: var(--gold); }
 
   /* Tela 1 */
-  .intro { justify-content: center; align-items: center; text-align: center; gap: 28px; padding: 24px 0 8px; }
-  .logo { width: 200px; max-width: 70%; height: auto; display: block; }
-  .intro h1 { font-size: 32px; max-width: 14ch; }
+  .intro { justify-content: center; align-items: center; text-align: center; gap: 22px; padding: 20px 0 8px; }
+  .logo { width: 160px; max-width: 60%; height: auto; display: block; }
+  .intro h1 { font-size: 31px; max-width: 14ch; }
   .intro .cta-wrap { width: 100%; display: flex; flex-direction: column; gap: 12px; }
   .hint { margin: 0; font-size: 13px; color: var(--cream-warm); }
   @media (min-width: 520px) { .intro h1 { font-size: 36px; } }
+
+  /* Foto + linha de credibilidade */
+  .byline { display: flex; align-items: center; gap: 12px; text-align: left; max-width: 100%; }
+  .photo {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--gold);
+  }
+  .byline-text { min-width: 0; }
+  .byline-name { margin: 0; font-family: var(--font-display); font-size: 18px; line-height: 1.2; }
+  .byline-cred { margin: 2px 0 0; font-size: 13px; line-height: 1.35; color: var(--cream-warm); }
 
   /* Botões (variante "pill" do site) */
   .btn {
@@ -238,15 +280,16 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     text-align: center;
     text-decoration: none;
     box-shadow: var(--shadow-card);
-    transition: background-color 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s ease-out;
+    transition: background-color 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s ease-out, opacity 0.2s ease;
   }
   .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
   .btn-pulse { animation: pulse 2.4s ease-in-out infinite; }
   @keyframes pulse {
     0%, 100% { box-shadow: var(--shadow-card), 0 0 0 0 rgba(212, 184, 150, 0.45); }
     50% { box-shadow: var(--shadow-card), 0 0 0 10px rgba(212, 184, 150, 0); }
   }
-  .btn-whatsapp { background: var(--whatsapp); color: var(--brown); }
+  .btn-whatsapp { background: var(--whatsapp); color: var(--brown); font-size: 13px; letter-spacing: 0.02em; gap: 8px; padding: 14px 16px; }
   .btn-whatsapp svg { width: 22px; height: 22px; flex-shrink: 0; }
 
   .link {
@@ -264,6 +307,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 
   /* Perguntas: as 7 opções cabem sem rolar no navegador do Instagram (~390x660) */
   .question h2 { font-size: 23px; margin-bottom: 14px; }
+  .question .q-sub { margin: -8px 0 14px; font-size: 14px; color: var(--cream-warm); }
   .options { display: flex; flex-direction: column; gap: 8px; }
   .opt {
     display: flex;
@@ -297,19 +341,32 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     border-radius: 50%;
     background: var(--gold);
   }
+  /* Múltipla escolha: caixinha quadrada com check */
+  .opt.multi .dot { border-radius: 6px; }
+  .opt.multi[aria-pressed="true"] .dot { background: var(--gold); }
+  .opt.multi[aria-pressed="true"] .dot::after {
+    width: 6px;
+    height: 11px;
+    border-radius: 0;
+    background: none;
+    border: solid var(--brown);
+    border-width: 0 2.5px 2.5px 0;
+    transform: translateY(-1px) rotate(45deg);
+  }
   .opt-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .opt-label { font-size: 15px; font-weight: 500; color: var(--cream); }
   .opt-sub { font-size: 12.5px; color: var(--cream-warm); }
+  .q-continue { margin-top: 18px; }
 
   /* Hover só em quem tem mouse: no toque, o hover "gruda" depois do clique */
   @media (hover: hover) {
     .back:hover, .link:hover { color: var(--cream); }
-    .btn:hover { background: var(--cream-warm); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
-    .btn-whatsapp:hover { background: #3fdc79; }
+    .btn:not(:disabled):hover { background: var(--cream-warm); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .btn-whatsapp:hover { background: #3fdc79 !important; }
     .opt:hover { border-color: var(--gold); background: rgba(245, 239, 231, 0.08); }
   }
 
-  /* Nome */
+  /* Nome + WhatsApp (última etapa) */
   .name-step h2 { font-size: 24px; margin: 8px 0 18px; }
   .field {
     width: 100%;
@@ -325,22 +382,8 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   .field::placeholder { color: var(--cream-warm); opacity: 0.85; }
   .field:focus { outline: 2px solid var(--gold); outline-offset: 2px; border-color: var(--gold); }
   .center { text-align: center; margin-top: 8px; }
-
-  /* Final */
-  .final h2 { font-size: 24px; margin-bottom: 10px; }
-  .final p.lead { margin: 0 0 20px; color: var(--cream-warm); font-size: 15px; }
-  .summary {
-    margin: 0 0 22px;
-    padding: 14px 16px;
-    border: 1px solid rgba(212, 184, 150, 0.3);
-    border-radius: 0.75rem;
-    background: rgba(245, 239, 231, 0.05);
-  }
-  .summary div { display: flex; flex-wrap: wrap; gap: 2px 8px; padding: 6px 0; }
-  .summary div + div { border-top: 1px solid rgba(212, 184, 150, 0.15); }
-  .summary dt { font-size: 13px; color: var(--gold); font-weight: 600; min-width: 92px; }
-  .summary dd { margin: 0; font-size: 14px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
-  .final .hint { text-align: center; margin-top: 12px; }
+  .name-step .hint { text-align: center; margin-top: 12px; }
+  .name-step .center { margin-top: 4px; }
 
   footer {
     margin-top: 24px;
@@ -372,26 +415,41 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
           <p class="step-label" id="step-label"></p>
         </div>
         <div id="progress-wrap">
-          <div class="progress" id="progress" role="progressbar" aria-label="Progresso do questionário" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
-            <span></span><span></span><span></span>
-          </div>
+          <div class="progress" id="progress" role="progressbar" aria-label="Progresso do questionário" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1"></div>
         </div>
       </div>
 
-      <!-- Tela 1: abertura -->
+      <!-- Tela 1: abertura (o título muda conforme o ?objetivo= do anúncio) -->
       <section class="screen intro" data-screen="intro" aria-labelledby="t-intro">
         <img class="logo" src="/agendar/logo.webp" width="440" height="179" alt="Nutricionista Luana Salvino" fetchpriority="high" decoding="async">
+
+        <div class="byline">
+          <!-- Foto: public/agendar/luana.webp (192x192). Se o arquivo faltar, a foto some (sem placeholder). -->
+          <img class="photo" src="/agendar/luana.webp" width="64" height="64" alt="Foto da nutricionista Luana Salvino" decoding="async" onerror="this.remove()">
+          <div class="byline-text">
+            <p class="byline-name">Luana Salvino</p>
+            <!-- EDITAR: linha de credibilidade. Só coloque títulos e especializações reais. -->
+            <p class="byline-cred">Nutricionista · saúde da mulher, lipedema e saúde intestinal</p>
+          </div>
+        </div>
+
         <h1 id="t-intro" tabindex="-1">Vamos agendar sua <em>consulta nutricional</em>?</h1>
         <div class="cta-wrap">
           <button type="button" class="btn btn-pulse" id="start">Quero agendar agora <span aria-hidden="true">→</span></button>
-          <p class="hint">3 perguntas rápidas · menos de 30 segundos</p>
+          <p class="hint" id="intro-hint">Até 4 perguntas rápidas · menos de 30 segundos</p>
         </div>
       </section>
 
-      <!-- Telas 2 a 4: perguntas (opções criadas pelo script abaixo) -->
+      <!-- Perguntas (opções criadas pelo script abaixo) -->
       <section class="screen question" data-screen="q1" aria-labelledby="t-q1" hidden>
         <h2 id="t-q1" tabindex="-1">Qual é o seu principal objetivo?</h2>
         <div class="options" role="group" aria-labelledby="t-q1" data-key="objetivo"></div>
+      </section>
+      <section class="screen question" data-screen="qs" aria-labelledby="t-qs" hidden>
+        <h2 id="t-qs" tabindex="-1">O que mais te incomoda hoje?</h2>
+        <p class="q-sub" id="qs-sub">Pode marcar mais de uma opção.</p>
+        <div class="options" role="group" aria-labelledby="t-qs" aria-describedby="qs-sub" data-key="sintomas" data-multi="true"></div>
+        <button type="button" class="btn q-continue" id="qs-continue" disabled>Continuar <span aria-hidden="true">→</span></button>
       </section>
       <section class="screen question" data-screen="q2" aria-labelledby="t-q2" hidden>
         <h2 id="t-q2" tabindex="-1">Como prefere ser atendida?</h2>
@@ -402,34 +460,22 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
         <div class="options" role="group" aria-labelledby="t-q3" data-key="inicio"></div>
       </section>
 
-      <!-- Tela 5: nome (opcional) -->
+      <!-- Última etapa: nome (opcional) e WhatsApp -->
       <section class="screen name-step" data-screen="name" aria-labelledby="t-name" hidden>
         <p class="step-label">Última etapa</p>
         <h2 id="t-name" tabindex="-1">Como podemos te chamar?</h2>
         <label for="name-input" class="sr-only">Seu primeiro nome (opcional)</label>
         <input class="field" id="name-input" type="text" placeholder="Seu primeiro nome"
-          autocomplete="given-name" autocapitalize="words" maxlength="40" enterkeyhint="next" spellcheck="false">
-        <button type="button" class="btn" id="name-continue">Continuar <span aria-hidden="true">→</span></button>
-        <div class="center">
-          <button type="button" class="link" id="name-skip">Prefiro não informar</button>
-        </div>
-      </section>
-
-      <!-- Tela 6: final -->
-      <section class="screen final" data-screen="final" aria-labelledby="t-final" hidden>
-        <h2 id="t-final" tabindex="-1">Pronto! Agora é só enviar a mensagem.</h2>
-        <p class="lead" id="final-text">Suas respostas já vão na mensagem. Assim a equipe de atendimento te passa os horários certos.</p>
-        <dl class="summary" data-clarity-mask="true" aria-label="Resumo das suas respostas">
-          <div id="sum-name-row" hidden><dt>Nome</dt><dd id="sum-name"></dd></div>
-          <div><dt>Objetivo</dt><dd id="sum-objetivo"></dd></div>
-          <div><dt>Atendimento</dt><dd id="sum-atendimento"></dd></div>
-          <div><dt>Começar</dt><dd id="sum-inicio"></dd></div>
-        </dl>
+          autocomplete="given-name" autocapitalize="words" maxlength="40" enterkeyhint="send" spellcheck="false"
+          data-clarity-mask="true">
         <a class="btn btn-whatsapp" id="whatsapp" href="#" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.79-1.31l-.34-.2-3.56.93.95-3.47-.22-.36a9.38 9.38 0 0 1-1.44-5c0-5.18 4.22-9.4 9.41-9.4 2.51 0 4.87.98 6.65 2.76a9.34 9.34 0 0 1 2.75 6.65c0 5.18-4.22 9.4-9.4 9.4m8-17.42A11.24 11.24 0 0 0 12.05.75C5.82.75.74 5.82.74 12.06c0 1.99.52 3.94 1.51 5.65L.65 23.25l5.67-1.49a11.3 11.3 0 0 0 5.73 1.46h.01c6.23 0 11.31-5.07 11.31-11.31 0-3.02-1.18-5.86-3.31-8"/></svg>
-          Agendar pelo WhatsApp
+          Falar com a equipe no WhatsApp
         </a>
-        <p class="hint">Você será levada ao WhatsApp com a mensagem pronta.</p>
+        <p class="hint">Nossa equipe responde em poucos minutos em horário comercial.</p>
+        <div class="center">
+          <a class="link" id="whatsapp-anon" href="#" target="_blank" rel="noopener noreferrer">Prefiro não informar</a>
+        </div>
         <div class="center" id="insta-wrap" hidden>
           <a class="link" id="instagram" href="https://www.instagram.com/luanasalvinonutri/" target="_blank" rel="noopener noreferrer">Prefiro conhecer o conteúdo no Instagram primeiro</a>
         </div>
@@ -448,40 +494,113 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
   // Número do WhatsApp do atendimento (DDI + DDD + número, só dígitos).
   var WHATSAPP_NUMBER = '5583994173887';
 
+  // O pixel recebe o objetivo como código neutro (anuncio_A, anuncio_B...),
+  // como já acontece no Clarity. O Meta restringe dados de saúde (ex.: "lipedema")
+  // em eventos e pode limitar o pixel. Para mandar o nome do objetivo, troque para true.
+  var ENVIAR_OBJETIVO_EM_TEXTO = false;
+
   // As respostas ficam só na memória desta aba: nada é salvo em cookie,
   // localStorage ou servidor. O nome nunca é enviado ao pixel.
+  // "msg" = como a resposta aparece na mensagem do WhatsApp.
   var QUESTIONS = {
     objetivo: [
-      { id: 'caneta', label: 'Acompanhamento com caneta emagrecedora', sub: 'Mounjaro, Ozempic, Wegovy e similares' },
-      { id: 'lipedema', label: 'Lipedema' },
-      { id: 'intestino', label: 'Saúde intestinal', sub: 'inchaço, gases, intestino preso' },
-      { id: 'mulher', label: 'Saúde da mulher', sub: 'TPM, menopausa, fertilidade' },
-      { id: 'emagrecimento', label: 'Emagrecimento' },
-      { id: 'hipertrofia', label: 'Hipertrofia e recomposição corporal', sub: 'ganhar massa e perder gordura' },
-      { id: 'outro', label: 'Outro objetivo' }
+      { id: 'caneta', label: 'Acompanhamento com caneta emagrecedora', sub: 'Mounjaro, Ozempic, Wegovy e similares', msg: 'acompanhamento com caneta emagrecedora' },
+      { id: 'lipedema', label: 'Lipedema', msg: 'tratamento para lipedema' },
+      { id: 'intestino', label: 'Saúde intestinal', sub: 'inchaço, gases, intestino preso', msg: 'cuidar da saúde intestinal' },
+      { id: 'mulher', label: 'Saúde da mulher', sub: 'TPM, menopausa, fertilidade', msg: 'cuidar da saúde da mulher' },
+      { id: 'emagrecimento', label: 'Emagrecimento', msg: 'emagrecimento' },
+      { id: 'hipertrofia', label: 'Hipertrofia e recomposição corporal', sub: 'ganhar massa e perder gordura', msg: 'hipertrofia e recomposição corporal' },
+      { id: 'outro', label: 'Outro objetivo', msg: 'uma consulta nutricional' }
     ],
     atendimento: [
-      { id: 'presencial', label: 'Presencial em Cajazeiras-PB' },
-      { id: 'presencial-ico', label: 'Presencial em Icó-CE' },
-      { id: 'online', label: 'Online', sub: 'de qualquer lugar do Brasil' }
+      { id: 'presencial', label: 'Presencial em Cajazeiras-PB', msg: 'presencial em Cajazeiras-PB', pixel: 'presencial_cajazeiras' },
+      { id: 'presencial-ico', label: 'Presencial em Icó-CE', msg: 'presencial em Icó-CE', pixel: 'presencial_ico' },
+      { id: 'online', label: 'Online', sub: 'de qualquer lugar do Brasil', msg: 'online', pixel: 'online' }
     ],
     inicio: [
-      { id: 'semana', label: 'Esta semana' },
-      { id: 'mes', label: 'Ainda este mês' },
-      { id: 'pesquisando', label: 'Só estou pesquisando por enquanto' }
+      { id: 'semana', label: 'Esta semana', msg: 'gostaria de começar esta semana', pixel: 'esta_semana' },
+      { id: 'mes', label: 'Ainda este mês', msg: 'gostaria de começar ainda este mês', pixel: 'este_mes' },
+      { id: 'duvidas', label: 'Quero tirar dúvidas primeiro', msg: 'queria tirar algumas dúvidas antes de começar', pixel: 'tirar_duvidas' }
     ]
   };
-  var NEXT = { q1: 'q2', q2: 'q3', q3: 'name', name: 'final' };
-  var PREV = { q1: 'intro', q2: 'q1', q3: 'q2', name: 'q3', final: 'name' };
-  var STEP_NUMBER = { q1: 1, q2: 2, q3: 3 };
+  // "O que mais te incomoda hoje?" só aparece para estes objetivos.
+  var SINTOMAS = {
+    lipedema: [
+      { id: 'dor', label: 'Dor nas pernas', msg: 'dor nas pernas' },
+      { id: 'inchaco', label: 'Inchaço', msg: 'inchaço' },
+      { id: 'roxos', label: 'Roxos com facilidade', msg: 'roxos que aparecem com facilidade' },
+      { id: 'desproporcao', label: 'Pernas desproporcionais ao corpo', msg: 'pernas desproporcionais ao corpo' }
+    ],
+    intestino: [
+      { id: 'gases', label: 'Gases', msg: 'gases' },
+      { id: 'estufada', label: 'Barriga estufada', msg: 'barriga estufada' },
+      { id: 'preso', label: 'Intestino preso', msg: 'intestino preso' },
+      { id: 'desconforto', label: 'Desconforto depois de comer', msg: 'desconforto depois de comer' }
+    ]
+  };
+  // Título da abertura conforme o ?objetivo= do anúncio.
+  var TITULOS = {
+    lipedema: 'Vamos cuidar das <em>suas pernas</em>?',
+    intestino: 'Vamos acabar com a <em>barriga estufada</em>?'
+  };
+  // Primeira frase da mensagem conforme a origem (classificação do /origem.js).
+  var FRASE_ORIGEM = {
+    google_ads: 'Vi o anúncio no Google.',
+    instagram: 'Vim pelo Instagram.',
+    google_organico: 'Encontrei vocês no Google.'
+  };
+  var PLATAFORMA_NOME = { facebook: 'Facebook', instagram: 'Instagram', whatsapp: 'WhatsApp', threads: 'Threads' };
 
-  var answers = { objetivo: null, atendimento: null, inicio: null };
+  // Em qual app da Meta a pessoa viu o anúncio: utm_source, depois o navegador
+  // interno do app, depois o site de onde veio. Sem pista nenhuma, fica vazio.
+  function plataformaMeta() {
+    var src = '';
+    try { src = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase(); } catch (e) {}
+    if (/^(facebook|fb)$/.test(src)) return 'facebook';
+    if (/^(instagram|ig)$/.test(src)) return 'instagram';
+    if (/^(whatsapp|wa)$/.test(src)) return 'whatsapp';
+    if (/^(threads|th)$/.test(src)) return 'threads';
+    var ua = navigator.userAgent || '';
+    if (/Barcelona|Threads/i.test(ua)) return 'threads'; // app do Threads
+    if (/Instagram/i.test(ua)) return 'instagram';
+    if (/WhatsApp/i.test(ua)) return 'whatsapp';
+    if (/FBAN|FBAV|FB_IAB|FBIOS/i.test(ua)) return 'facebook';
+    var host = '';
+    try { host = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ''; } catch (e) {}
+    if (/(^|\.)threads\.(net|com)$/.test(host)) return 'threads';
+    if (/(^|\.)instagram\.com$/.test(host)) return 'instagram';
+    if (/(^|\.)whatsapp\.(com|net)$/.test(host)) return 'whatsapp';
+    if (/(^|\.)facebook\.com$/.test(host)) return 'facebook';
+    return '';
+  }
+
+  // Esta página só recebe tráfego de anúncio da Meta. Conta como anúncio quando o
+  // /origem.js marcou meta_ads, ou quando o clique traz fbclid sem utm de mídia
+  // orgânica (os anúncios atuais chegam só com fbclid).
+  function fraseOrigem() {
+    var p;
+    try { p = new URLSearchParams(location.search); } catch (e) { p = null; }
+    var med = p ? (p.get('utm_medium') || '').toLowerCase() : '';
+    var anuncioMeta = window.__origem === 'meta_ads' ||
+      (p && p.get('fbclid') && (!med || /^(cpc|paid|paid_social)$/.test(med)));
+    if (anuncioMeta) {
+      var plat = PLATAFORMA_NOME[plataformaMeta()];
+      return plat ? 'Vi o anúncio no ' + plat + '.' : 'Vi o anúncio.';
+    }
+    return FRASE_ORIGEM[window.__origem] || 'Vim pelo site.';
+  }
+  // Números que o Clarity já usa nos funis; a pergunta nova ganha nome próprio.
+  var CLARITY_PERGUNTA = { objetivo: '1', atendimento: '2', inicio: '3', sintomas: 'sintomas' };
+  var SCREEN_KEY = { q1: 'objetivo', qs: 'sintomas', q2: 'atendimento', q3: 'inicio' };
+
+  var answers = { objetivo: null, sintomas: [], atendimento: null, inicio: null };
   var firstName = '';
   var current = 'intro';
   var advancing = false;
   var lastTrackedKey = null;
   var quizStarted = false;
   var leadSent = false;
+  var presetUsed = false;
 
   var $ = function (id) { return document.getElementById(id); };
   var screens = {};
@@ -489,11 +608,7 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     screens[el.getAttribute('data-screen')] = el;
   });
 
-  function track() {
-    if (window.fbq) {
-      try { window.fbq.apply(null, arguments); } catch (e) {}
-    }
-  }
+  function track() { window.__pixel.apply(null, arguments); }
 
   function clarityEvent(name) {
     if (window.clarity) {
@@ -501,21 +616,45 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     }
   }
 
-  var QUESTION_NUMBER = { objetivo: 1, atendimento: 2, inicio: 3 };
+  function optionsFor(key) {
+    return key === 'sintomas' ? (SINTOMAS[answers.objetivo] || []) : QUESTIONS[key];
+  }
 
   function findOption(key, id) {
-    var list = QUESTIONS[key];
+    var list = optionsFor(key);
     for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
     return null;
   }
 
+  // Perguntas que esta pessoa vai ver, na ordem.
+  function steps() {
+    var s = [];
+    if (!presetUsed) s.push('q1');
+    if (SINTOMAS[answers.objetivo]) s.push('qs');
+    s.push('q2', 'q3');
+    return s;
+  }
+  function nextOf(name) {
+    var s = steps(), i = s.indexOf(name);
+    if (name === 'intro') return s[0];
+    return i >= 0 && i < s.length - 1 ? s[i + 1] : 'name';
+  }
+  function prevOf(name) {
+    var s = steps();
+    if (name === 'name') return s[s.length - 1];
+    var i = s.indexOf(name);
+    return i > 0 ? s[i - 1] : 'intro';
+  }
+
   // Monta os cartões de resposta
-  Array.prototype.forEach.call(document.querySelectorAll('.options'), function (group) {
+  function buildOptions(group) {
     var key = group.getAttribute('data-key');
-    QUESTIONS[key].forEach(function (opt) {
+    var multi = group.hasAttribute('data-multi');
+    group.innerHTML = '';
+    optionsFor(key).forEach(function (opt) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'opt';
+      b.className = 'opt' + (multi ? ' multi' : '');
       b.setAttribute('aria-pressed', 'false');
       b.setAttribute('data-id', opt.id);
       b.setAttribute('data-clarity-mask', 'true');
@@ -523,29 +662,61 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
         (opt.sub ? '<span class="opt-sub"></span>' : '') + '</span>';
       b.querySelector('.opt-label').textContent = opt.label;
       if (opt.sub) b.querySelector('.opt-sub').textContent = opt.sub;
-      b.addEventListener('click', function () { choose(key, opt.id); });
+      b.addEventListener('click', function () {
+        if (multi) toggleSintoma(opt.id); else choose(key, opt.id);
+      });
       group.appendChild(b);
     });
-  });
+    renderSelection(key);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.options'), buildOptions);
 
   function renderSelection(key) {
     var group = document.querySelector('.options[data-key="' + key + '"]');
     Array.prototype.forEach.call(group.children, function (b) {
-      b.setAttribute('aria-pressed', b.getAttribute('data-id') === answers[key] ? 'true' : 'false');
+      var id = b.getAttribute('data-id');
+      var on = key === 'sintomas' ? answers.sintomas.indexOf(id) >= 0 : id === answers[key];
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    if (key === 'sintomas') $('qs-continue').disabled = answers.sintomas.length === 0;
   }
 
   function choose(key, id) {
     if (advancing) return;
+    if (key === 'objetivo' && id !== answers.objetivo) answers.sintomas = [];
     answers[key] = id;
     renderSelection(key);
-    clarityEvent('quiz_pergunta_' + QUESTION_NUMBER[key]);
+    clarityEvent('quiz_pergunta_' + CLARITY_PERGUNTA[key]);
     advancing = true;
     var from = current;
     setTimeout(function () {
       advancing = false;
-      if (current === from) go(NEXT[from]);
+      if (current === from) go(nextOf(from));
     }, 200);
+  }
+
+  function toggleSintoma(id) {
+    var i = answers.sintomas.indexOf(id);
+    if (i >= 0) answers.sintomas.splice(i, 1); else answers.sintomas.push(id);
+    renderSelection('sintomas');
+  }
+
+  function renderProgress(name) {
+    var s = steps();
+    var n = s.indexOf(name) + 1;
+    $('progress-wrap').hidden = !n;
+    $('step-label').hidden = !n;
+    if (!n) return;
+    $('step-label').textContent = 'Pergunta ' + n + ' de ' + s.length;
+    var bar = $('progress');
+    bar.setAttribute('aria-valuemax', String(s.length));
+    bar.setAttribute('aria-valuenow', String(n));
+    bar.innerHTML = '';
+    for (var i = 0; i < s.length; i++) {
+      var span = document.createElement('span');
+      if (i < n) span.className = 'on';
+      bar.appendChild(span);
+    }
   }
 
   function go(name) {
@@ -554,20 +725,11 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     screens[current].classList.remove('enter');
     current = name;
 
-    var topbar = $('topbar');
-    topbar.hidden = name === 'intro';
-    var n = STEP_NUMBER[name];
-    $('progress-wrap').hidden = !n;
-    $('step-label').hidden = !n;
-    if (n) {
-      $('step-label').textContent = 'Pergunta ' + n + ' de 3';
-      $('progress').setAttribute('aria-valuenow', String(n));
-      Array.prototype.forEach.call($('progress').children, function (s, i) {
-        s.classList.toggle('on', i < n);
-      });
-    }
+    $('topbar').hidden = name === 'intro';
+    renderProgress(name);
 
-    if (name === 'final') renderFinal();
+    if (name === 'qs') buildOptions(document.querySelector('.options[data-key="sintomas"]'));
+    if (name === 'name') renderLastStep();
 
     var el = screens[name];
     el.hidden = false;
@@ -589,35 +751,42 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     return word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1).toLocaleLowerCase('pt-BR');
   }
 
-  function buildMessage() {
-    var intro = firstName
-      ? 'Olá! Meu nome é ' + firstName + '. Vim pelo anúncio e quero saber sobre a consulta com a Nutricionista Luana Salvino.'
-      : 'Olá! Vim pelo anúncio e quero saber sobre a consulta com a Nutricionista Luana Salvino.';
-    return [
-      intro,
-      '',
-      '• Objetivo: ' + findOption('objetivo', answers.objetivo).label,
-      '• Atendimento: ' + findOption('atendimento', answers.atendimento).label,
-      '• Quero começar: ' + findOption('inicio', answers.inicio).label
-    ].join('\n');
+  function joinList(items) {
+    if (items.length <= 1) return items.join('');
+    return items.slice(0, -1).join(', ') + ' e ' + items[items.length - 1];
   }
 
-  function renderFinal() {
-    var researching = answers.inicio === 'pesquisando';
-    $('final-text').textContent = researching
-      ? 'Sem compromisso: mande sua dúvida para o atendimento, ou conheça antes o conteúdo da Luana.'
-      : 'Suas respostas já vão na mensagem. Assim a equipe de atendimento te passa os horários certos.';
-    $('insta-wrap').hidden = !researching;
+  function buildMessage(name) {
+    var obj = findOption('objetivo', answers.objetivo);
+    // Na ordem da lista, não na ordem em que foram marcados.
+    var sintomas = optionsFor('sintomas').filter(function (o) {
+      return answers.sintomas.indexOf(o.id) >= 0;
+    }).map(function (o) { return o.msg; });
+    var partes = [];
+    partes.push(name ? 'Oi, sou a ' + name + '!' : 'Oi!');
+    partes.push(fraseOrigem());
+    partes.push('Tenho interesse em ' + obj.msg +
+      (sintomas.length ? ', o que mais me incomoda é ' + joinList(sintomas) : '') + '.');
+    partes.push('Prefiro atendimento ' + findOption('atendimento', answers.atendimento).msg +
+      ' e ' + findOption('inicio', answers.inicio).msg + '.');
+    return partes.join(' ');
+  }
 
-    $('sum-name-row').hidden = !firstName;
-    $('sum-name').textContent = firstName;
-    $('sum-objetivo').textContent = findOption('objetivo', answers.objetivo).label;
-    $('sum-atendimento').textContent = findOption('atendimento', answers.atendimento).label;
-    $('sum-inicio').textContent = findOption('inicio', answers.inicio).label;
+  function whatsappLink(name) {
+    return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(buildMessage(name));
+  }
 
-    $('whatsapp').href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(buildMessage());
+  function updateLinks() {
+    firstName = cleanName($('name-input').value);
+    $('whatsapp').href = whatsappLink(firstName);
+    $('whatsapp-anon').href = whatsappLink('');
+  }
 
-    // Objetivo (dado de saúde) e nome não vão para o pixel.
+  function renderLastStep() {
+    $('insta-wrap').hidden = answers.inicio !== 'duvidas';
+    updateLinks();
+
+    // Objetivo (dado de saúde) e nome não vão para o pixel neste evento.
     var key = answers.atendimento + '|' + answers.inicio;
     if (key !== lastTrackedKey) {
       lastTrackedKey = key;
@@ -629,56 +798,87 @@ src="https://www.facebook.com/tr?id=2020158598758649&ev=PageView&noscript=1"></n
     }
   }
 
-  function submitName(skip) {
-    if (skip) {
-      firstName = '';
-      $('name-input').value = '';
+  function newEventId() {
+    return 'quiz.' + Date.now().toString(36) + '.' + Math.random().toString(36).slice(2, 10);
+  }
+
+  // Clique final que abre o WhatsApp (com ou sem nome).
+  // Lead só para quem quer começar esta semana ou este mês, uma vez por visita.
+  // Quem quer tirar dúvidas gera LeadFrio (personalizado) no lugar do Lead.
+  function onWhatsappClick(withName) {
+    // O /origem.js reescreve a 1ª linha de links do WhatsApp no clique.
+    // A mensagem do quiz já traz a origem, então o link é refeito aqui (roda depois dele).
+    updateLinks();
+    var link = withName ? $('whatsapp') : $('whatsapp-anon');
+    link.href = whatsappLink(withName ? firstName : '');
+
+    clarityEvent('quiz_whatsapp');
+    if (leadSent) return;
+    leadSent = true;
+
+    var params = {
+      objetivo: ENVIAR_OBJETIVO_EM_TEXTO ? answers.objetivo
+        : (window.__ANUNCIO[answers.objetivo] || 'anuncio_outro'),
+      local: findOption('atendimento', answers.atendimento).pixel,
+      quando: findOption('inicio', answers.inicio).pixel
+    };
+    // Mesmo event_id deve ir para a API de Conversões, se um dia ela for ligada ao quiz.
+    var eventId = newEventId();
+    if (answers.inicio === 'duvidas') {
+      track('trackCustom', 'LeadFrio', params, { eventID: eventId });
+      clarityEvent('LeadFrio');
     } else {
-      firstName = cleanName($('name-input').value);
+      params.content_category = findOption('atendimento', answers.atendimento).label;
+      track('track', 'Lead', params, { eventID: eventId });
+      clarityEvent('Lead');
     }
-    go('final');
+    track('track', 'Contact', {}, { eventID: eventId + '.contact' });
+    clarityEvent('Contact');
   }
 
   // Link com objetivo já marcado (?objetivo=caneta etc.); "outro" não é aceito pela URL.
   var preset = window.__objetivoParam;
   if (preset && preset !== 'outro' && findOption('objetivo', preset)) {
     answers.objetivo = preset;
+    presetUsed = true;
     renderSelection('objetivo');
   }
+  if (presetUsed && TITULOS[preset]) $('t-intro').innerHTML = TITULOS[preset];
+  var nPerguntas = steps().length;
+  $('intro-hint').textContent = (presetUsed ? nPerguntas + ' perguntas rápidas' : 'Até 4 perguntas rápidas') +
+    ' · menos de 30 segundos';
 
-  // Funil de cliques no pixel: QuizIniciado → QuizConcluido → Lead/Contact.
+  // Funil de cliques no pixel: QuizIniciado → QuizConcluido → Lead ou LeadFrio (+ Contact).
   // "entrada" diz só se veio de link com tema, sem dizer qual tema.
   $('start').addEventListener('click', function () {
     if (!quizStarted) {
       quizStarted = true;
-      track('trackCustom', 'QuizIniciado', { entrada: answers.objetivo ? 'link_com_tema' : 'padrao' });
+      track('trackCustom', 'QuizIniciado', { entrada: presetUsed ? 'link_com_tema' : 'padrao' });
       clarityEvent('QuizIniciado');
     }
-    go(answers.objetivo ? 'q2' : 'q1');
+    go(nextOf('intro'));
   });
-  $('back').addEventListener('click', function () {
-    if (PREV[current]) go(PREV[current]);
+  $('back').addEventListener('click', function () { go(prevOf(current)); });
+  $('qs-continue').addEventListener('click', function () {
+    if (!answers.sintomas.length) return;
+    clarityEvent('quiz_pergunta_' + CLARITY_PERGUNTA.sintomas);
+    go(nextOf('qs'));
   });
-  $('name-continue').addEventListener('click', function () { submitName(false); });
-  $('name-skip').addEventListener('click', function () { submitName(true); });
+  $('name-input').addEventListener('input', updateLinks);
   $('name-input').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { e.preventDefault(); submitName(false); }
+    if (e.key === 'Enter') { e.preventDefault(); $('whatsapp').click(); }
   });
-  // Lead uma vez por visita, para cliques repetidos não inflarem a campanha.
-  $('whatsapp').addEventListener('click', function () {
-    clarityEvent('quiz_whatsapp');
-    if (leadSent) return;
-    leadSent = true;
-    track('track', 'Lead', {
-      content_category: findOption('atendimento', answers.atendimento).label
-    });
-    track('track', 'Contact');
-    clarityEvent('Lead');
-    clarityEvent('Contact');
+  $('whatsapp').addEventListener('click', function () { onWhatsappClick(true); });
+  $('whatsapp-anon').addEventListener('click', function () {
+    $('name-input').value = '';
+    onWhatsappClick(false);
   });
   $('instagram').addEventListener('click', function () {
     track('trackCustom', 'CliqueInstagram');
   });
+
+  // Usado nos testes locais.
+  window.__quiz = { answers: answers, buildMessage: buildMessage, steps: steps };
 })();
 </script>
 </body>
