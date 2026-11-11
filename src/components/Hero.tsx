@@ -42,7 +42,7 @@ const Hero = memo(() => {
 
                 <div className="space-y-2 px-2">
                   <p className="text-sm sm:text-base lg:text-base text-foreground/85 leading-relaxed">
-                    Atendimento presencial em Cajazeiras-PB
+                    Atendimento presencial em Cajazeiras-PB e Icó-CE
                   </p>
                 </div>
 
